@@ -1,5 +1,1 @@
-Bonjour Matax
-
-あなたはバカです
-
-あなたの太った母親を犬のふしだらな息子とファックしてください
+désolé papa matax, né kkochu para doduet ???
