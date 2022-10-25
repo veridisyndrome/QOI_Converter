@@ -1,1 +1,1 @@
-suce mon kkochu
+Né kkochu pare tchule ?
