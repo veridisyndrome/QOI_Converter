@@ -25,7 +25,20 @@ public final class ArrayUtils {
      * @return (boolean) - true if both arrays have the same content (or both null), false otherwise
      * @throws AssertionError if one of the parameters is null
      */
-    public static boolean equals(byte[] a1, byte[] a2){
+    public static boolean equals(byte[] a1, byte[] a2)
+    {
+        boolean valeursIdentiques = true;
+
+        for (int i = 0; i < a1.length; i++)
+        {
+            if (a1[i] != a2[i])
+            {
+                valeursIdentiques = false;
+                break;
+            }
+        }
+
+        assert valeursIdentiques;
         return Helper.fail("Not Implemented");
     }
 
@@ -36,7 +49,20 @@ public final class ArrayUtils {
      * @return (boolean) - true if both arrays have the same content (or both null), false otherwise
      * @throws AssertionError if one of the parameters is null
      */
-    public static boolean equals(byte[][] a1, byte[][] a2){
+    public static boolean equals(byte[][] a1, byte[][] a2)
+    {
+        boolean valeursIdentiques = true;
+
+        for (int i = 0; i < a1.length; i++)
+        {
+            if (a1[i] != a2[i])
+            {
+                valeursIdentiques = false;
+                break;
+            }
+        }
+
+        assert valeursIdentiques;
         return Helper.fail("Not Implemented");
     }
 
