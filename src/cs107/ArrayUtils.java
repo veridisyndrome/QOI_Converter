@@ -60,6 +60,7 @@ public final class ArrayUtils {
         {
             return valeursIdentiques;
         }
+
         else
         {
             for (int i = 0; i < a1.length; i++)
