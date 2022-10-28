@@ -40,9 +40,9 @@ public final class Main {
          */
 
         // ========== Test ArrayUtils ==========
-        //assert testWrap();
-        //assert testToInt();
-        //assert testFromInt();
+        assert testWrap();
+        assert testToInt();
+        assert testFromInt();
         //assert testConcatArrayBytes();
         //assert testConcatBytes();
         //assert testExtract();

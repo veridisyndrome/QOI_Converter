@@ -107,8 +107,16 @@ public final class ArrayUtils {
      * @return (int) - Integer representation of the array
      * @throws AssertionError if the input is null or the input's length is different from 4
      */
-    public static int toInt(byte[] bytes){
-        return Helper.fail("Not Implemented");
+    public static int toInt(byte[] bytes)
+    {
+        assert bytes != null && bytes.length == 4;
+
+        int val1 = (bytes[0] & 0xFF) << 24;
+        int val2 = (bytes[1] & 0xFF) << 16;
+        int val3 = (bytes[2] & 0xFF) << 8;
+        int val4 = (bytes[3] & 0xFF);
+
+        return val1 | val2 | val3 | val4;
     }
 
     /**
@@ -124,9 +132,7 @@ public final class ArrayUtils {
         byte c = (byte)(value >> 8 & 0xFF);
         byte d = (byte)(value & 0xFF);
 
-        byte[] array = new byte[]{a,b,c,d};
-
-        return array;
+        return new byte[]{a,b,c,d};
     }
 
     // ==================================================================================
