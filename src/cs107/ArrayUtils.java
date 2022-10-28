@@ -117,8 +117,16 @@ public final class ArrayUtils {
      * @param value (int) - The integer
      * @return (byte[]) - Big Endian representation of the integer
      */
-    public static byte[] fromInt(int value){
-        return Helper.fail("Not Implemented");
+    public static byte[] fromInt(int value)
+    {
+        byte a = (byte)(value >> 24);
+        byte b = (byte)(value >> 16 & 0xFF);
+        byte c = (byte)(value >> 8 & 0xFF);
+        byte d = (byte)(value & 0xFF);
+
+        byte[] array = new byte[]{a,b,c,d};
+
+        return array;
     }
 
     // ==================================================================================
