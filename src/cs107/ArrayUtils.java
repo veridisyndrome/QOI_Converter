@@ -51,17 +51,26 @@ public final class ArrayUtils {
      */
     public static boolean equals(byte[][] a1, byte[][] a2)
     {
-        boolean valeursIdentiques = true;
-        assert (a1 == null || a2 != null) && (a2 == null || a1 != null);
+        assert (a1 == null && a2 == null) || (a2 != null && a1 != null);
+        assert a1.length == a2.length;
 
-        for (int i = 0; i < a1.length; i++)
+        boolean valeursIdentiques = true;
+
+        if((a1 == null) && (a2 == null))
         {
-            for (int j = 0; j < a1[i].length; j++)
+            return valeursIdentiques;
+        }
+        else
+        {
+            for (int i = 0; i < a1.length; i++)
             {
-                if (a1[i][j] != a2[i][j])
+                for (int j = 0; j < a1[i].length; j++)
                 {
-                    valeursIdentiques = false;
-                    break;
+                    if (a1[i][j] != a2[i][j])
+                    {
+                        valeursIdentiques = false;
+                        break;
+                    }
                 }
             }
         }
@@ -78,9 +87,7 @@ public final class ArrayUtils {
      * @param value (byte) - value to wrap
      * @return (byte[]) - array with one element (value)
      */
-    public static byte[] wrap(byte value){
-        return Helper.fail("Not Implemented");
-    }
+    public static byte[] wrap(byte value) {return Helper.fail("Not Implemented");}
 
     // ==================================================================================
     // ========================== INTEGER MANIPULATION METHODS ==========================
