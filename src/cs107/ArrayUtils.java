@@ -88,7 +88,12 @@ public final class ArrayUtils {
      * @param value (byte) - value to wrap
      * @return (byte[]) - array with one element (value)
      */
-    public static byte[] wrap(byte value) {return Helper.fail("Not Implemented");}
+    public static byte[] wrap(byte value)
+    {
+        byte[] wrap = new byte[1];
+        wrap[0] = value;
+        return wrap;
+    }
 
     // ==================================================================================
     // ========================== INTEGER MANIPULATION METHODS ==========================
