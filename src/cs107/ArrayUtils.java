@@ -28,6 +28,7 @@ public final class ArrayUtils {
     public static boolean equals(byte[] a1, byte[] a2)
     {
         boolean valeursIdentiques = true;
+        assert (a1 == null && a2 == null) || (a2 != null && a1 != null);
 
         for (int i = 0; i < a1.length; i++)
         {
@@ -38,8 +39,7 @@ public final class ArrayUtils {
             }
         }
 
-        assert valeursIdentiques;
-        return Helper.fail("Not Implemented");
+        return valeursIdentiques;
     }
 
     /**
@@ -52,18 +52,21 @@ public final class ArrayUtils {
     public static boolean equals(byte[][] a1, byte[][] a2)
     {
         boolean valeursIdentiques = true;
+        assert (a1 == null || a2 != null) && (a2 == null || a1 != null);
 
         for (int i = 0; i < a1.length; i++)
         {
-            if (a1[i] != a2[i])
+            for (int j = 0; j < a1[i].length; j++)
             {
-                valeursIdentiques = false;
-                break;
+                if (a1[i][j] != a2[i][j])
+                {
+                    valeursIdentiques = false;
+                    break;
+                }
             }
         }
 
-        assert valeursIdentiques;
-        return Helper.fail("Not Implemented");
+        return valeursIdentiques;
     }
 
     // ==================================================================================
