@@ -145,9 +145,15 @@ public final class ArrayUtils {
      * @return (byte[]) - Array representation of the sequence
      * @throws AssertionError if the input is null
      */
-    public static byte[] concat(byte ... tabs){
-        return Helper.fail("Not Implemented");
-    }
+    /*public static byte[] concat(byte[] ... tabs)
+    {
+        assert tabs != null;
+
+        for (int i = 0; i < tabs.length; i++)
+        {
+
+        }
+    }*/
 
     /**
      * Concatenate a given sequence of arrays into one array
