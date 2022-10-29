@@ -169,7 +169,6 @@ public final class ArrayUtils {
                 indice++;
             }
         }
-
         return tableauFinal;
     }
 
@@ -192,7 +191,6 @@ public final class ArrayUtils {
         }
 
         return tab;
-
     }
 
     // ==================================================================================

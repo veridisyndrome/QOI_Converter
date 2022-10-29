@@ -47,7 +47,7 @@ public final class Main {
         assert testConcatBytes();
         assert testExtract();
         assert testPartition();
-        //assert testImageToChannels();
+        assert testImageToChannels();
         //assert testChannelsToImage();
 
         // ========== Test QOIEncoder ==========
