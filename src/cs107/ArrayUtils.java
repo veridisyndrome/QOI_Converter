@@ -147,12 +147,14 @@ public final class ArrayUtils {
      */
     public static byte[] concat(byte[] ... tabs)
     {
-        assert tabs != null;
+        /*assert tabs != null;
 
         for (int i = 0; i < tabs.length; i++)
         {
 
-        }
+        }*/
+
+        return Helper.fail("Not Implemented");
     }
 
     /**
@@ -162,8 +164,19 @@ public final class ArrayUtils {
      * @throws AssertionError if the input is null
      * or one of the inner arrays of input is null.
      */
-    public static byte[] concat(byte[] ... bytes){
-        return Helper.fail("Not Implemented");
+    public static byte[] concat(byte ... bytes)
+    {
+        assert bytes != null;
+
+        byte[] tab = new byte[bytes.length];
+
+        for(int i = 0; i < bytes.length; ++i)
+        {
+            tab[i] = bytes[i];
+        }
+
+        return tab;
+
     }
 
     // ==================================================================================
@@ -179,8 +192,22 @@ public final class ArrayUtils {
      * @throws AssertionError if the input is null or start and length are invalid.
      * start + length should also be smaller than the input's length
      */
-    public static byte[] extract(byte[] input, int start, int length){
-        return Helper.fail("Not Implemented");
+    public static byte[] extract(byte[] input, int start, int length)
+    {
+        assert input != null;
+        assert start > 0;
+        assert length <= 0;
+        assert (start+length) <= input.length;
+
+        byte[] extracted = new byte[length];
+
+        for(int i = 0; i < length; ++i)
+        {
+            extracted[i] = input[start+i];
+        }
+
+        return extracted;
+
     }
 
     /**
