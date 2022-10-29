@@ -145,7 +145,7 @@ public final class ArrayUtils {
      * @return (byte[]) - Array representation of the sequence
      * @throws AssertionError if the input is null
      */
-    /*public static byte[] concat(byte[] ... tabs)
+    public static byte[] concat(byte[] ... tabs)
     {
         assert tabs != null;
 
@@ -153,7 +153,7 @@ public final class ArrayUtils {
         {
 
         }
-    }*/
+    }
 
     /**
      * Concatenate a given sequence of arrays into one array
