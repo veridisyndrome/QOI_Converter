@@ -247,7 +247,24 @@ public final class ArrayUtils {
             somme += sizes[i];
         }
 
-        assert somme == sizes.length;
+        assert somme == input.length;
+
+        byte[][] partition = new byte[sizes.length][];
+
+        int indice = 0;
+
+        for (int i = 0; i < sizes.length; i++)
+        {
+            partition[i] = new byte[sizes[i]];
+
+            for(int j = 0; j < sizes[i]; j++)
+            {
+                partition[i][j] = input[indice];
+                indice++;
+            }
+        }
+
+        return partition;
     }
 
     // ==================================================================================
