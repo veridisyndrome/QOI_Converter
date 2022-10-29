@@ -147,14 +147,30 @@ public final class ArrayUtils {
      */
     public static byte[] concat(byte[] ... tabs)
     {
-        /*assert tabs != null;
+        assert tabs != null;
+        int nombreElement = 0;
+        int indice = 0;
 
         for (int i = 0; i < tabs.length; i++)
         {
+            for (int j = 0; j < tabs[i].length; j++)
+            {
+                nombreElement++;
+            }
+        }
 
-        }*/
+        byte[] tableauFinal = new byte[nombreElement];
 
-        return Helper.fail("Not Implemented");
+        for (int i = 0; i < tabs.length; i++)
+        {
+            for (int j = 0; j < tabs[i].length; j++)
+            {
+                tableauFinal[indice] = tabs[i][j];
+                indice++;
+            }
+        }
+
+        return tableauFinal;
     }
 
     /**
@@ -170,7 +186,7 @@ public final class ArrayUtils {
 
         byte[] tab = new byte[bytes.length];
 
-        for(int i = 0; i < bytes.length; ++i)
+        for(int i = 0; i < bytes.length; i++)
         {
             tab[i] = bytes[i];
         }
@@ -196,12 +212,12 @@ public final class ArrayUtils {
     {
         assert input != null;
         assert start > 0;
-        assert length <= 0;
+        assert length >= 0;
         assert (start+length) <= input.length;
 
         byte[] extracted = new byte[length];
 
-        for(int i = 0; i < length; ++i)
+        for(int i = 0; i < length; i++)
         {
             extracted[i] = input[start+i];
         }
@@ -220,8 +236,18 @@ public final class ArrayUtils {
      * @throws AssertionError if one of the parameters is null
      * or the sum of the elements in sizes is different from the input's length
      */
-    public static byte[][] partition(byte[] input, int ... sizes) {
-        return Helper.fail("Not Implemented");
+    public static byte[][] partition(byte[] input, int ... sizes)
+    {
+        assert input != null && sizes != null;
+
+        int somme = 0;
+
+        for (int i = 0; i < sizes.length; i++)
+        {
+            somme += sizes[i];
+        }
+
+        assert somme == sizes.length;
     }
 
     // ==================================================================================
