@@ -103,6 +103,7 @@ public final class ArrayUtils {
      * Create an Integer using the given array. The input needs to be considered
      * as "Big Endian"
      * (See handout for the definition of "Big Endian")
+     *
      * @param bytes (byte[]) - Array of 4 bytes
      * @return (int) - Integer representation of the array
      * @throws AssertionError if the input is null or the input's length is different from 4
@@ -298,8 +299,38 @@ public final class ArrayUtils {
      * or height is invalid
      * or width is invalid
      */
-    public static int[][] channelsToImage(byte[][] input, int height, int width){
-        return Helper.fail("Not Implemented");
+    public static int[][] channelsToImage(byte[][] input, int height, int width)
+    {
+        assert input != null;
+        assert input.length == height * width;
+
+        for(int i = 0; i < input.length; i++)
+        {
+            assert input[i] != null;
+        }
+
+
+        for(int i = 0; i < input.length; i++)
+        {
+            byte temp = input[i][3];
+            input [i][3] = input[i][2];
+            input [i][2] = input[i][1];
+            input [i][1] = input[i][0];
+            input [i][0] = temp;
+        }
+
+        int[][] output = new int[height][width];
+        int indice = 0;
+
+        for(int i = 0; i < height; i++)
+        {
+            for(int j = 0; j < width; j++)
+            {
+                output[i][j] = ArrayUtils.toInt(input[indice]);
+                indice++;
+            }
+        }
+        return output;
     }
 
 }
