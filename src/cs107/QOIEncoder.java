@@ -70,8 +70,17 @@ public final class QOIEncoder {
      * @throws AssertionError if the pixel's length is not 4
      * @return (byte[]) Encoding of the pixel using the QOI_OP_RGBA schema
      */
-    public static byte[] qoiOpRGBA(byte[] pixel){
-        return Helper.fail("Not Implemented");
+    public static byte[] qoiOpRGBA(byte[] pixel)
+    {
+        assert pixel.length == 4;
+
+        byte b0 = QOISpecification.QOI_OP_RGBA_TAG;
+        byte b1 = pixel[0];
+        byte b2 = pixel[1];
+        byte b3 = pixel[2];
+        byte b4 = pixel[3];
+
+        return ArrayUtils.concat(b0, b1, b2, b3, b4);
     }
 
     /**
@@ -91,8 +100,23 @@ public final class QOIEncoder {
      * (See the handout for the constraints)
      * @return (byte[]) - Encoding of the given difference
      */
-    public static byte[] qoiOpDiff(byte[] diff){
-        return Helper.fail("Not Implemented");
+    public static byte[] qoiOpDiff(byte[] diff)
+    {
+        assert diff != null;
+        assert diff.length == 3;
+
+        for (int i = 0; i < diff.length; i++)
+        {
+            diff[i] = (byte) (diff[i] + 2);
+        }
+
+        /*int part1 =  diff[0];
+        int part2 =  diff[1];
+        int part3 =  diff[2];
+
+        return ArrayUtils.wrap()*/
+
+
     }
 
     /**

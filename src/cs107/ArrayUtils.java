@@ -301,6 +301,7 @@ public final class ArrayUtils {
      */
     public static int[][] channelsToImage(byte[][] input, int height, int width)
     {
+        assert ((height >= 0) && (width >= 0));
         assert input != null;
         assert input.length == height * width;
 
