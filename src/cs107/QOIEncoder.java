@@ -1,5 +1,8 @@
 package cs107;
 
+import static cs107.QOISpecification.QOI_OP_DIFF_TAG;
+import static cs107.QOISpecification.QOI_OP_INDEX_TAG;
+
 /**
  * "Quite Ok Image" Encoder
  * @apiNote Second task of the 2022 Mini Project
@@ -54,14 +57,13 @@ public final class QOIEncoder {
     {
         assert pixel.length == 4;
 
-        byte tag = QOISpecification.QOI_OP_RGB_TAG;
+        byte b0 = QOISpecification.QOI_OP_RGB_TAG;
+        byte b1 = pixel[0];
+        byte b2 = pixel[1];
+        byte b3 = pixel[2];
 
-        for (int i = 0; i < pixel.length; i++)
-        {
-            pixel[i] += tag;
-        }
 
-        return pixel;
+        return ArrayUtils.concat(b0, b1, b2, b3);
     }
 
     /**
@@ -89,8 +91,11 @@ public final class QOIEncoder {
      * @throws AssertionError if the index is outside the range of all possible indices
      * @return (byte[]) - Encoding of the index using the QOI_OP_INDEX schema
      */
-    public static byte[] qoiOpIndex(byte index){
-        return Helper.fail("Not Implemented");
+    public static byte[] qoiOpIndex(byte index)
+    {
+        assert index > 0 && index < 64;
+
+        return ArrayUtils.wrap((byte)(QOI_OP_INDEX_TAG | index));
     }
 
     /**
@@ -107,14 +112,17 @@ public final class QOIEncoder {
 
         for (int i = 0; i < diff.length; i++)
         {
+            assert diff[i] > -3 && diff[i] < 2;
             diff[i] = (byte) (diff[i] + 2);
         }
 
-        /*int part1 =  diff[0];
-        int part2 =  diff[1];
-        int part3 =  diff[2];
 
-        return ArrayUtils.wrap()*/
+        byte b0 = (byte)(diff[0] << 4);
+        byte b1 = (byte)(diff[1] << 2);
+        byte b2 = diff[2];
+
+
+        return ArrayUtils.wrap((byte)(QOI_OP_DIFF_TAG | b0 | b1 | b2));
 
 
     }
