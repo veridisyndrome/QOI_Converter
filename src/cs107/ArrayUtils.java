@@ -28,18 +28,26 @@ public final class ArrayUtils {
     public static boolean equals(byte[] a1, byte[] a2)
     {
         boolean valeursIdentiques = true;
-        assert (a1 == null && a2 == null) || (a2 != null && a1 != null);
+        assert (a1 == null && a2 == null) || (a1 != null && a2 != null);
 
-        for (int i = 0; i < a1.length; i++)
+        if (a1 == null)
         {
-            if (a1[i] != a2[i])
-            {
-                valeursIdentiques = false;
-                break;
-            }
+            return valeursIdentiques;
         }
 
-        return valeursIdentiques;
+        else
+        {
+            for (int i = 0; i < a1.length; i++)
+            {
+                if (a1[i] != a2[i])
+                {
+                    valeursIdentiques = false;
+                    break;
+                }
+            }
+
+            return valeursIdentiques;
+        }
     }
 
     /**
@@ -51,27 +59,24 @@ public final class ArrayUtils {
      */
     public static boolean equals(byte[][] a1, byte[][] a2)
     {
-        assert (a1 == null && a2 == null) || (a2 != null && a1 != null);
-        assert a1.length == a2.length;
-
         boolean valeursIdentiques = true;
+        assert (a1 == null && a2 == null) || (a1 != null && a2 != null);
 
-        if((a1 == null) && (a2 == null))
+        if (a1 == null)
         {
             return valeursIdentiques;
         }
 
-        else
+        assert a1.length == a2.length;
+
+        for (int i = 0; i < a1.length; i++)
         {
-            for (int i = 0; i < a1.length; i++)
+            for (int j = 0; j < a1[i].length; j++)
             {
-                for (int j = 0; j < a1[i].length; j++)
+                if (a1[i][j] != a2[i][j])
                 {
-                    if (a1[i][j] != a2[i][j])
-                    {
-                        valeursIdentiques = false;
-                        break;
-                    }
+                    valeursIdentiques = false;
+                    break;
                 }
             }
         }
@@ -281,8 +286,40 @@ public final class ArrayUtils {
      * @throws AssertionError if the input is null
      * or one of the inner arrays of input is null
      */
-    public static byte[][] imageToChannels(int[][] input){
-        return Helper.fail("Not Implemented");
+    public static byte[][] imageToChannels(int[][] input)
+    {
+        assert input != null;
+
+        for (int i = 0; i < input.length - 1; i++)
+        {
+            assert input[i] != null;
+            assert input[i].length == input[i + 1].length;
+        }
+
+        int lignes = input.length;
+        int colonnes = input[0].length;
+
+        byte[][] output = new byte[lignes * colonnes][4];
+        int indice = 0;
+
+        for (int i = 0; i < lignes; i++)
+        {
+            for (int j = 0; j < colonnes; j++)
+            {
+                byte[] bytes = ArrayUtils.fromInt(input[i][j]);
+                byte temp = bytes[0];
+                bytes [0] = bytes[1];
+                bytes [1] = bytes[2];
+                bytes [2] = bytes[3];
+                bytes [3] = temp;
+
+                output[indice] = bytes;
+                indice++;
+
+            }
+        }
+
+        return output;
     }
 
     /**
@@ -305,11 +342,10 @@ public final class ArrayUtils {
         assert input != null;
         assert input.length == height * width;
 
-        for(int i = 0; i < input.length; i++)
+        for (int i = 0; i < input.length; i++)
         {
             assert input[i] != null;
         }
-
 
         for(int i = 0; i < input.length; i++)
         {
@@ -323,7 +359,7 @@ public final class ArrayUtils {
         int[][] output = new int[height][width];
         int indice = 0;
 
-        for(int i = 0; i < height; i++)
+        for (int i = 0; i < height; i++)
         {
             for(int j = 0; j < width; j++)
             {
@@ -331,6 +367,7 @@ public final class ArrayUtils {
                 indice++;
             }
         }
+
         return output;
     }
 
