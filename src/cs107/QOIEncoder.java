@@ -25,8 +25,19 @@ public final class QOIEncoder {
      *  (See the "Quite Ok Image" Specification or the handouts of the project for more information)
      * @return (byte[]) - Corresponding "Quite Ok Image" Header
      */
-    public static byte[] qoiHeader(Helper.Image image){
-        return Helper.fail("Not Implemented");
+    public static byte[] qoiHeader(Helper.Image image)
+    {
+        assert image != null;
+        assert image.channels() == QOISpecification.RGB || image.channels() == QOISpecification.RGBA;
+        assert image.color_space() == QOISpecification.sRGB || image.color_space() == QOISpecification.ALL;
+
+        byte[] nombreMagique = QOISpecification.QOI_MAGIC;
+        byte[] largeurImage = ArrayUtils.fromInt(image.data()[0].length);
+        byte[] hauteurImage = ArrayUtils.fromInt(image.data().length);
+        byte[] nombreCanaux = ArrayUtils.wrap(image.channels());
+        byte[] espaceCouleur = ArrayUtils.wrap(image.color_space());
+
+        return ArrayUtils.concat(nombreMagique, largeurImage, hauteurImage, nombreCanaux, espaceCouleur);
     }
 
     // ==================================================================================
@@ -39,8 +50,18 @@ public final class QOIEncoder {
      * @throws AssertionError if the pixel's length is not 4
      * @return (byte[]) - Encoding of the pixel using the QOI_OP_RGB schema
      */
-    public static byte[] qoiOpRGB(byte[] pixel){
-        return Helper.fail("Not Implemented");
+    public static byte[] qoiOpRGB(byte[] pixel)
+    {
+        assert pixel.length == 4;
+
+        byte tag = QOISpecification.QOI_OP_RGB_TAG;
+
+        for (int i = 0; i < pixel.length; i++)
+        {
+            pixel[i] += tag;
+        }
+
+        return pixel;
     }
 
     /**
