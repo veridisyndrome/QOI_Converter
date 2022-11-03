@@ -174,8 +174,54 @@ public final class QOIEncoder {
      * @param image (byte[][]) - Formatted image to encode
      * @return (byte[]) - "Quite Ok Image" representation of the image
      */
-    public static byte[] encodeData(byte[][] image){
-        return Helper.fail("Not Implemented");
+    public static byte[] encodeData(byte[][] image)
+    {
+        assert image != null;
+
+        byte[] pixelPrecedent = QOISpecification.START_PIXEL;
+        byte[][] tableDeHachage = new byte[64][4];
+        int compteur = 0;
+        List<byte[]> arrayList = new ArrayList<>();
+
+        for (int i = 0; i < image.length; i++)
+        {
+            assert image[i] != null;
+            assert image[i].length == 4;
+        }
+
+        for (int i = 0; i < image.length; i++)
+        {
+            byte[] pixel = image[i];
+            if (ArrayUtils.equals(pixel, pixelPrecedent))
+            {
+                compteur++;
+
+                if (compteur == 62 || i == image.length - 1)
+                {
+                   arrayList.add(qoiOpRun((byte) compteur));
+                   compteur = 0;
+                }
+            }
+
+            else
+            {
+                if (compteur != 0)
+                {
+                    arrayList.add(qoiOpRun((byte) compteur));
+                }
+            }
+
+            if (ArrayUtils.equals(tableDeHachage[hash(pixel)], pixel))
+            {
+                arrayList.add(qoiOpIndex((byte) i));
+            }
+
+            else
+            {
+                tableDeHachage[hash(pixel)] = pixel;    
+            }
+        }
+
     }
 
     /**
