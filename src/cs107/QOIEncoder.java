@@ -1,7 +1,6 @@
 package cs107;
 
-import static cs107.QOISpecification.QOI_OP_DIFF_TAG;
-import static cs107.QOISpecification.QOI_OP_INDEX_TAG;
+import static cs107.QOISpecification.*;
 
 /**
  * "Quite Ok Image" Encoder

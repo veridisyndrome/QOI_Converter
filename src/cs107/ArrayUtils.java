@@ -90,6 +90,7 @@ public final class ArrayUtils {
 
     /**
      * Wrap the given value in an array
+     *
      * @param value (byte) - value to wrap
      * @return (byte[]) - array with one element (value)
      */
