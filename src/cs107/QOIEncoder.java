@@ -1,5 +1,8 @@
 package cs107;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static cs107.QOISpecification.*;
 
 /**
@@ -145,8 +148,6 @@ public final class QOIEncoder {
 
         byte[] encoding1 = ArrayUtils.wrap((byte)(QOI_OP_LUMA_TAG | b0));
         byte[] encoding2 = ArrayUtils.wrap((byte)(b1 | b2));
-
-
 
         return ArrayUtils.concat(encoding1, encoding2);
     }
