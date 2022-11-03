@@ -120,10 +120,7 @@ public final class QOIEncoder {
         byte b1 = (byte)(diff[1] << 2);
         byte b2 = diff[2];
 
-
         return ArrayUtils.wrap((byte)(QOI_OP_DIFF_TAG | b0 | b1 | b2));
-
-
     }
 
     /**
@@ -134,8 +131,24 @@ public final class QOIEncoder {
      * (See the handout for the constraints)
      * @return (byte[]) - Encoding of the given difference
      */
-    public static byte[] qoiOpLuma(byte[] diff){
-        return Helper.fail("Not Implemented");
+    public static byte[] qoiOpLuma(byte[] diff)
+    {
+        assert diff != null;
+        assert diff.length == 3;
+        assert diff[1] > -33 && diff[1] < 32;
+        assert diff[0] - diff[1] > -9 && diff[0] - diff[1] < 8;
+        assert diff[2] - diff[1] > -9 && diff[2] - diff[1] < 8;
+
+        byte b0 = (byte)(diff[1] + 32);
+        byte b1 = (byte)((diff[0] - diff[1] + 8) << 4);
+        byte b2 = (byte)(diff[2] - diff[1] + 8);
+
+        byte[] encoding1 = ArrayUtils.wrap((byte)(QOI_OP_LUMA_TAG | b0));
+        byte[] encoding2 = ArrayUtils.wrap((byte)(b1 | b2));
+
+
+
+        return ArrayUtils.concat(encoding1, encoding2);
     }
 
     /**
@@ -144,8 +157,11 @@ public final class QOIEncoder {
      * @throws AssertionError if count is not between 0 (exclusive) and 63 (exclusive)
      * @return (byte[]) - Encoding of count
      */
-    public static byte[] qoiOpRun(byte count){
-        return Helper.fail("Not Implemented");
+    public static byte[] qoiOpRun(byte count)
+    {
+        assert count > 0 && count < 63;
+
+        return ArrayUtils.wrap((byte)(QOI_OP_RUN_TAG | (count - 1)));
     }
 
     // ==================================================================================
