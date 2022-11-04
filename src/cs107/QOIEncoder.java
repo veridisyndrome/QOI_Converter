@@ -248,7 +248,7 @@ public final class QOIEncoder {
     private static boolean tryDiffEncode(byte[] pixelPrecedent, List<byte[]> arrayList, byte[] pixel) {
         int compteurDiff = 0;
         for (int j = 0; j < 3; j++) {
-            if ((pixel[j] - pixelPrecedent[j]) > -3 && (pixel[j] - pixelPrecedent[j]) < 2) {
+            if (((byte)(pixel[j] - pixelPrecedent[j]) > -3 && (byte)(pixel[j] - pixelPrecedent[j]) < 2)) {
                 ++compteurDiff;
             }
         }

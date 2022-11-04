@@ -202,7 +202,7 @@ public final class ArrayUtils {
      */
     public static byte[] extract(byte[] input, int start, int length) {
         assert input != null;
-        assert start > 0;
+        assert start >= 0;
         assert length >= 0;
         assert (start + length) <= input.length;
 
@@ -280,6 +280,9 @@ public final class ArrayUtils {
         }
 
         int lignes = input.length;
+        if(lignes == 0){
+            return new byte[][]{};
+        }
         int colonnes = input[0].length;
 
         byte[][] output = new byte[lignes * colonnes][4];
