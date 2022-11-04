@@ -182,6 +182,7 @@ public final class QOIEncoder {
 
         byte[] pixelPrecedent = QOISpecification.START_PIXEL;
         byte[][] tableDeHachage = new byte[64][4];
+
         int compteur = 0;
         List<byte[]> arrayList = new ArrayList<>();
 
@@ -192,8 +193,11 @@ public final class QOIEncoder {
 
         for (int i = 0; i < image.length; i++) {
             byte[] pixel = image[i];
-            if (ArrayUtils.equals(pixel, pixelPrecedent))
-            {
+            if (i != 0) {
+                pixelPrecedent = image[i-1];
+            }
+
+            if (ArrayUtils.equals(pixel, pixelPrecedent)) {
                 compteur++;
                 if (compteur == 62 || i == image.length - 1) {
                     arrayList.add(qoiOpRun((byte) compteur));
