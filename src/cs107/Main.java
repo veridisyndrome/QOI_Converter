@@ -1,5 +1,7 @@
 package cs107;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -68,6 +70,15 @@ public final class Main {
         //assert testDecodeQoiOpLuma();
         //assert testDecodeQoiOpRun();
         //assert testDecodeData();
+
+        pngToQoi("references/beach.png", "beach.qoi");
+
+        try {
+            Diff.diff((new FileInputStream("references/beach.qoi").readAllBytes()),
+            new FileInputStream("/Users/pablo/Git/BA1/MP1/mp1/res/beach.qoi").readAllBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("All the tests passes. Congratulations");
     }

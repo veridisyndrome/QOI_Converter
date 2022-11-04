@@ -97,7 +97,7 @@ public final class QOIEncoder {
      * @throws AssertionError if the index is outside the range of all possible indices
      */
     public static byte[] qoiOpIndex(byte index) {
-        assert index > 0 && index < 64;
+        assert index >= 0 && index < 64;
 
         return ArrayUtils.wrap((byte) (QOI_OP_INDEX_TAG | index));
     }
@@ -207,7 +207,7 @@ public final class QOIEncoder {
                 }
             }
 
-            if (tryHashEncode(tableDeHachage, arrayList, (byte) i, pixel)) continue;
+            if (tryHashEncode(tableDeHachage, arrayList, pixel)) continue;
 
             if (pixel[3] == pixelPrecedent[3]) {
                 if (tryDiffEncode(pixelPrecedent, arrayList, pixel)) continue;
@@ -257,9 +257,9 @@ public final class QOIEncoder {
         return false;
     }
 
-    private static boolean tryHashEncode(byte[][] tableDeHachage, List<byte[]> arrayList, byte i, byte[] pixel) {
+    private static boolean tryHashEncode(byte[][] tableDeHachage, List<byte[]> arrayList, byte[] pixel) {
         if (ArrayUtils.equals(tableDeHachage[hash(pixel)], pixel)) {
-            arrayList.add(qoiOpIndex(i));
+            arrayList.add(qoiOpIndex(hash(pixel)));
             return true;
         } else {
             tableDeHachage[hash(pixel)] = pixel;
@@ -278,7 +278,9 @@ public final class QOIEncoder {
      * TO CREATE THE FILE, YOU'LL NEED TO CALL Helper::write
      */
     public static byte[] qoiFile(Helper.Image image) {
-        return Helper.fail("Not Implemented");
+        assert image != null;
+
+        return ArrayUtils.concat(QOIEncoder.qoiHeader(image), QOIEncoder.encodeData(ArrayUtils.imageToChannels(image.data())), QOI_EOF);
     }
 
 }
