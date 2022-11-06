@@ -63,7 +63,7 @@ public final class Main {
         assert testEncodeData();
 
         // ========== Test QOIDecoder ==========
-        //assert testDecodeHeader();
+        assert testDecodeHeader();
         //assert testDecodeQoiOpRGB();
         //assert testDecodeQoiOpRGBA();
         //assert testDecodeQoiOpDiff();
@@ -71,14 +71,14 @@ public final class Main {
         //assert testDecodeQoiOpRun();
         //assert testDecodeData();
 
-        pngToQoi("references/beach.png", "beach.qoi");
+        //pngToQoi("references/beach.png", "beach.qoi");
 
-        try {
+        /*try {
             Diff.diff((new FileInputStream("references/beach.qoi").readAllBytes()),
             new FileInputStream("/Users/pablo/Git/BA1/MP1/mp1/res/beach.qoi").readAllBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
         System.out.println("All the tests passes. Congratulations");
     }
