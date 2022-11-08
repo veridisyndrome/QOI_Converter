@@ -92,7 +92,7 @@ public final class ArrayUtils {
         return wrap;
     }
 
-    public static byte deWrap(byte[] value) {
+    public static byte unWrap(byte[] value) {
         return value[0];
     }
 

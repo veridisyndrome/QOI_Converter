@@ -80,6 +80,8 @@ public final class Main {
             throw new RuntimeException(e);
         }*/
 
+        pngToQoi("references/beach.png", "beach.qoi");
+
         System.out.println("All the tests passes. Congratulations");
     }
 

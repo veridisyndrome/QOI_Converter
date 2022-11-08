@@ -31,23 +31,19 @@ public final class QOIDecoder {
         assert header.length == QOISpecification.HEADER_SIZE;
         assert ArrayUtils.equals(ArrayUtils.extract(header, 0, 4), QOISpecification.QOI_MAGIC);
 
-        byte nombreDeCanaux = header[12];
-        byte espaceCouleur = header[13];
+        byte espaceCouleur = header[12];
+        byte nombreDeCanaux = header[13];
 
-        assert nombreDeCanaux == QOISpecification.RGB || nombreDeCanaux == QOISpecification.RGBA;
-        assert espaceCouleur == QOISpecification.ALL || espaceCouleur == QOISpecification.sRGB;
+        assert espaceCouleur == QOISpecification.RGB || espaceCouleur == QOISpecification.RGBA;
+        assert nombreDeCanaux == QOISpecification.ALL || nombreDeCanaux == QOISpecification.sRGB;
 
-        byte[] b0 = new byte[3];
-        byte[] b1 = new byte[3];
+        byte[] b0 = ArrayUtils.extract(header,3,4);
+        byte[] b1 = ArrayUtils.extract(header,7,4);
 
+        int largeur = ArrayUtils.toInt(b0);
+        int hauteur = ArrayUtils.toInt(b1);
 
-        System.out.print(ArrayUtils.toInt(b0));
-        System.out.print(ArrayUtils.toInt(b1));
-        System.out.print(b0);
-        System.out.print(b1);
-
-
-        return new int[]{ArrayUtils.toInt(b0), ArrayUtils.toInt(b1), nombreDeCanaux, espaceCouleur};
+        return new int[]{largeur, hauteur, nombreDeCanaux, espaceCouleur};
     }
 
 
