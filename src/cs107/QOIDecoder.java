@@ -31,21 +31,23 @@ public final class QOIDecoder {
         assert header.length == QOISpecification.HEADER_SIZE;
         assert ArrayUtils.equals(ArrayUtils.extract(header, 0, 4), QOISpecification.QOI_MAGIC);
 
-        byte[] nombreDeCanaux = ArrayUtils.extract(header, 12,1);
-        byte[] espaceCouleur = ArrayUtils.extract(header, 13,1);
+        byte nombreDeCanaux = header[12];
+        byte espaceCouleur = header[13];
 
-        assert ArrayUtils.deWrap(nombreDeCanaux) == QOISpecification.RGB || ArrayUtils.deWrap(nombreDeCanaux) == QOISpecification.RGBA;
-        assert ArrayUtils.deWrap(espaceCouleur) == QOISpecification.ALL || ArrayUtils.deWrap(espaceCouleur) == QOISpecification.sRGB;
+        assert nombreDeCanaux == QOISpecification.RGB || nombreDeCanaux == QOISpecification.RGBA;
+        assert espaceCouleur == QOISpecification.ALL || espaceCouleur == QOISpecification.sRGB;
 
-        byte[] b0 = ArrayUtils.extract(header,3,4);
-        byte[] b1 = ArrayUtils.extract(header,7,4);
+        byte[] b0 = new byte[3];
+        byte[] b1 = new byte[3];
 
-        int a0 = ArrayUtils.toInt(ArrayUtils.concat(b0));
-        int a1 = ArrayUtils.toInt(ArrayUtils.concat(b1));
-        int a2 = ArrayUtils.toInt(nombreDeCanaux);
-        int a3 = ArrayUtils.toInt(espaceCouleur);
 
-        return new int[]{a0, a1, a2, a3};
+        System.out.print(ArrayUtils.toInt(b0));
+        System.out.print(ArrayUtils.toInt(b1));
+        System.out.print(b0);
+        System.out.print(b1);
+
+
+        return new int[]{ArrayUtils.toInt(b0), ArrayUtils.toInt(b1), nombreDeCanaux, espaceCouleur};
     }
 
 
