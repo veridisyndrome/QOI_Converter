@@ -64,9 +64,9 @@ public final class Main {
 
         // ========== Test QOIDecoder ==========
         assert testDecodeHeader();
-        //assert testDecodeQoiOpRGB();
-        //assert testDecodeQoiOpRGBA();
-        //assert testDecodeQoiOpDiff();
+        assert testDecodeQoiOpRGB();
+        assert testDecodeQoiOpRGBA();
+        assert testDecodeQoiOpDiff();
         //assert testDecodeQoiOpLuma();
         //assert testDecodeQoiOpRun();
         //assert testDecodeData();
@@ -80,7 +80,7 @@ public final class Main {
             throw new RuntimeException(e);
         }*/
 
-        pngToQoi("references/beach.png", "beach.qoi");
+        //pngToQoi("references/beach.png", "beach.qoi");
 
         System.out.println("All the tests passes. Congratulations");
     }

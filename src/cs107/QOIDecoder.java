@@ -1,6 +1,9 @@
 package cs107;
 
+import javax.swing.*;
+
 import static cs107.Helper.Image;
+import static cs107.QOISpecification.QOI_OP_DIFF_TAG;
 
 /**
  * "Quite Ok Image" Decoder
@@ -62,7 +65,20 @@ public final class QOIDecoder {
      * @throws AssertionError See handouts section 6.2.1
      */
     public static int decodeQoiOpRGB(byte[][] buffer, byte[] input, byte alpha, int position, int idx){
-        return Helper.fail("Not Implemented");
+        assert buffer != null;
+        assert input != null;
+        assert position < buffer.length && position >= 0;
+        assert idx + 3 <= input.length && idx >= 0;
+
+
+        for (int i = 0; i < 3; i++){
+            buffer[position][i] = input[idx+i];
+        }
+
+
+        buffer[position][3] = alpha;
+
+        return 3;
     }
 
     /**
@@ -75,7 +91,16 @@ public final class QOIDecoder {
      * @throws AssertionError See handouts section 6.2.2
      */
     public static int decodeQoiOpRGBA(byte[][] buffer, byte[] input, int position, int idx){
-        return Helper.fail("Not Implemented");
+        assert buffer != null;
+        assert input != null;
+        assert position < buffer.length && position >= 0;
+        assert idx + 4 <= input.length && idx >= 0;
+
+        for (int i = 0; i < 4; i++){
+            buffer[position][i] = input[idx+i];
+        }
+
+        return 4;
     }
 
     /**
@@ -86,7 +111,16 @@ public final class QOIDecoder {
      * @throws AssertionError See handouts section 6.2.4
      */
     public static byte[] decodeQoiOpDiff(byte[] previousPixel, byte chunk){
-        return Helper.fail("Not Implemented");
+        assert previousPixel != null;
+        assert previousPixel.length == 4;
+        assert (chunk & 0b11000000) == QOISpecification.QOI_OP_DIFF_TAG;
+
+        byte b0 = (byte) (previousPixel[0] + ((0b00110000 & chunk) >> 4) - 2);
+        byte b1 = (byte) (previousPixel[1] + ((0b00001100 & chunk) >> 2) - 2);
+        byte b2 = (byte) (previousPixel[2] + (0b00000011 & chunk) - 2);
+        byte b3 = previousPixel[3];
+
+        return ArrayUtils.concat(b0, b1, b2, b3);
     }
 
     /**
