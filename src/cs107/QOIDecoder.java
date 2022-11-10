@@ -131,7 +131,16 @@ public final class QOIDecoder {
      * @throws AssertionError See handouts section 6.2.5
      */
     public static byte[] decodeQoiOpLuma(byte[] previousPixel, byte[] data){
-        return Helper.fail("Not Implemented");
+        assert previousPixel != null && data != null;
+        assert previousPixel.length == 4;
+        assert (byte) (data[0] & 0b11000000) == QOISpecification.QOI_OP_LUMA_TAG;
+
+        byte b0 = (byte) ((0b00111111 & data[0]) - 32);
+        byte b1 = (byte) (previousPixel[0] + ((0b11110000 & data[1]) >> 4) - 8);
+        byte b2 = (byte) (previousPixel[2] + (0b00001111 & data[1]) - 8);
+        byte b3 = previousPixel[3];
+
+        return ArrayUtils.concat((byte) (b1+b0), (byte) (b0 + previousPixel[1]), (byte) (b2+b0), b3);
     }
 
     /**
@@ -144,7 +153,18 @@ public final class QOIDecoder {
      * @throws AssertionError See handouts section 6.2.6
      */
     public static int decodeQoiOpRun(byte[][] buffer, byte[] pixel, byte chunk, int position){
-        return Helper.fail("Not Implemented");
+        assert buffer != null;
+        assert position < buffer.length && position >= 0;
+        assert pixel != null;
+        assert pixel.length == 4;
+        assert buffer[0].length == 4;
+
+        int count = (chunk & 0b00111111) + 1;
+
+        for (int i = position; i < count + position; i++){
+            buffer[i] = pixel;
+        }
+        return count - 1;
     }
 
     // ==================================================================================

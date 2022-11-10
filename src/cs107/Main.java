@@ -67,11 +67,11 @@ public final class Main {
         assert testDecodeQoiOpRGB();
         assert testDecodeQoiOpRGBA();
         assert testDecodeQoiOpDiff();
-        //assert testDecodeQoiOpLuma();
-        //assert testDecodeQoiOpRun();
+        assert testDecodeQoiOpLuma();
+        assert testDecodeQoiOpRun();
         //assert testDecodeData();
 
-        //pngToQoi("references/beach.png", "beach.qoi");
+        //pngToQoi("references/IMG_0199.png", "jaeyi.qoi");
 
         /*try {
             Diff.diff((new FileInputStream("references/beach.qoi").readAllBytes()),
