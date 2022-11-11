@@ -71,7 +71,7 @@ public final class Main {
         assert testDecodeQoiOpRun();
         assert testDecodeData();
 
-        String name = "beach";
+        String name = "random";
 
         qoiToPng("references/"+ name +".qoi", name + ".png");
 

@@ -330,20 +330,19 @@ public final class ArrayUtils {
             assert input[i] != null;
         }
 
-        for (int i = 0; i < input.length; i++) {
-            byte temp = input[i][3];
-            input[i][3] = input[i][2];
-            input[i][2] = input[i][1];
-            input[i][1] = input[i][0];
-            input[i][0] = temp;
-        }
 
         int[][] output = new int[height][width];
         int indice = 0;
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                output[i][j] = ArrayUtils.toInt(input[indice]);
+
+                temp[0] = input[indice][3];
+                temp[1] = input[indice][0];
+                temp[2] = input[indice][1];
+                temp[3] = input[indice][2];
+
+                output[i][j] = ArrayUtils.toInt(temp);
                 indice++;
             }
         }
