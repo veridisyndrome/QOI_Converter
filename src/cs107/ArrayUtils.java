@@ -334,6 +334,8 @@ public final class ArrayUtils {
         int[][] output = new int[height][width];
         int indice = 0;
 
+        byte[] temp = new byte[4];
+
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
 
