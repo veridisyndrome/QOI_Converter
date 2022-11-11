@@ -214,11 +214,9 @@ public final class QOIDecoder {
             } else if ((byte) (tag & 0b11000000) == QOI_OP_DIFF_TAG) {
                 result[pos] = decodeQoiOpDiff(pixelPrecedent, tag);
                 idx++;
-                pos++;
             } else if ((byte) (tag & 0b11000000) == QOI_OP_LUMA_TAG) {
                 result[pos] = decodeQoiOpLuma(pixelPrecedent, ArrayUtils.extract(data, idx, 2));
                 idx += 2;
-                pos++;
             } else if ((byte) (tag & 0b11000000) == QOI_OP_RUN_TAG) {
                 int count = decodeQoiOpRun(result, pixelPrecedent, tag, pos);
                 idx++;
@@ -227,7 +225,6 @@ public final class QOIDecoder {
                 int index = tag & 0b00111111;
                 result[pos] = tableDeHachage[index];
                 idx++;
-                pos++;
             }
 
             tableDeHachage[hash(result[pos - 1])] = result[pos - 1];
