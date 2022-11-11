@@ -47,7 +47,6 @@ public final class QOIDecoder {
         assert largeur > 0;
         assert hauteur > 0;
 
-
         return new int[]{largeur, hauteur, nombreDeCanaux, espaceCouleur};
     }
 
@@ -202,15 +201,12 @@ public final class QOIDecoder {
             if (pos != 0) {
                 pixelPrecedent = result[pos - 1];
             }
-            //TODO code ban be cleaned up
             if (tag == QOISpecification.QOI_OP_RGB_TAG) {
-                decodeQoiOpRGB(result, data, pixelPrecedent[3], pos, idx);
-                pos++;
+                decodeQoiOpRGB(result, data, pixelPrecedent[3], pos, idx + 1);
                 idx += 4;
             } else if (tag == QOISpecification.QOI_OP_RGBA_TAG) {
                 decodeQoiOpRGBA(result, data, pos, idx + 1);
                 idx += 5;
-                pos++;
             } else if ((byte) (tag & 0b11000000) == QOI_OP_DIFF_TAG) {
                 result[pos] = decodeQoiOpDiff(pixelPrecedent, tag);
                 idx++;
