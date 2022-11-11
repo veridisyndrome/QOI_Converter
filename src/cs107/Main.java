@@ -69,7 +69,7 @@ public final class Main {
         assert testDecodeQoiOpDiff();
         assert testDecodeQoiOpLuma();
         assert testDecodeQoiOpRun();
-        //assert testDecodeData();
+        assert testDecodeData();
 
         //pngToQoi("references/IMG_0199.png", "jaeyi.qoi");
 

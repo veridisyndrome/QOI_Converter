@@ -35,17 +35,18 @@ public final class QOIDecoder {
         assert header.length == QOISpecification.HEADER_SIZE;
         assert ArrayUtils.equals(ArrayUtils.extract(header, 0, 4), QOISpecification.QOI_MAGIC);
 
-        byte espaceCouleur = header[12];
-        byte nombreDeCanaux = header[13];
+        byte nombreDeCanaux = header[12];
+        byte espaceCouleur = header[13];
 
-        assert espaceCouleur == QOISpecification.RGB || espaceCouleur == QOISpecification.RGBA;
-        assert nombreDeCanaux == QOISpecification.ALL || nombreDeCanaux == QOISpecification.sRGB;
+        assert nombreDeCanaux == QOISpecification.RGB || nombreDeCanaux == QOISpecification.RGBA;
+        assert espaceCouleur == QOISpecification.ALL || espaceCouleur == QOISpecification.sRGB;
 
-        byte[] b0 = ArrayUtils.extract(header,3,4);
-        byte[] b1 = ArrayUtils.extract(header,7,4);
+        int largeur = ArrayUtils.toInt(ArrayUtils.extract(header, 4, 4));
+        int hauteur = ArrayUtils.toInt(ArrayUtils.extract(header, 8, 4));
 
-        int largeur = ArrayUtils.toInt(b0);
-        int hauteur = ArrayUtils.toInt(b1);
+        assert largeur > 0;
+        assert hauteur > 0;
+
 
         return new int[]{largeur, hauteur, nombreDeCanaux, espaceCouleur};
     }
@@ -72,11 +73,9 @@ public final class QOIDecoder {
         assert position < buffer.length && position >= 0;
         assert idx + 3 <= input.length && idx >= 0;
 
-
-        for (int i = 0; i < 3; i++){
-            buffer[position][i] = input[idx+i];
+        for (int i = 0; i < 3; i++) {
+            buffer[position][i] = input[idx + i];
         }
-
 
         buffer[position][3] = alpha;
 
@@ -186,8 +185,56 @@ public final class QOIDecoder {
      * @return (byte[][]) - Decoded "Quite Ok Image"
      * @throws AssertionError See handouts section 6.3
      */
-    public static byte[][] decodeData(byte[] data, int width, int height){
-        return Helper.fail("Not Implemented");
+    public static byte[][] decodeData(byte[] data, int width, int height) {
+        assert data != null;
+        assert height > 0 && width > 0;
+
+        byte[] pixelPrecedent = QOISpecification.START_PIXEL;
+        byte[][] tableDeHachage = new byte[64][4];
+
+        byte[][] result = new byte[height * width][4];
+
+        int idx = 0;
+        int pos = 0;
+
+        while (idx < data.length) {
+            byte tag = data[idx];
+            if (pos != 0) {
+                pixelPrecedent = result[pos - 1];
+            }
+            //TODO code ban be cleaned up
+            if (tag == QOISpecification.QOI_OP_RGB_TAG) {
+                decodeQoiOpRGB(result, data, pixelPrecedent[3], pos, idx);
+                pos++;
+                idx += 4;
+            } else if (tag == QOISpecification.QOI_OP_RGBA_TAG) {
+                decodeQoiOpRGBA(result, data, pos, idx);
+                idx += 5;
+                pos++;
+            } else if ((byte) (tag & 0b11000000) == QOI_OP_DIFF_TAG) {
+                result[pos] = decodeQoiOpDiff(pixelPrecedent, tag);
+                idx++;
+                pos++;
+            } else if ((byte) (tag & 0b11000000) == QOI_OP_LUMA_TAG) {
+                result[pos] = decodeQoiOpLuma(pixelPrecedent, ArrayUtils.extract(data, idx, 2));
+                idx += 2;
+                pos++;
+            } else if ((byte) (tag & 0b11000000) == QOI_OP_RUN_TAG) {
+                int count = decodeQoiOpRun(result, pixelPrecedent, tag, pos);
+                idx++;
+                pos += count + 1;
+            } else if ((byte) (tag & 0b11000000) == QOI_OP_INDEX_TAG) {
+                int index = tag & 0b00111111;
+                result[pos] = tableDeHachage[index];
+                idx++;
+                pos++;
+            }
+
+            tableDeHachage[hash(result[pos - 1])] = result[pos - 1];
+        }
+        assert pos == width * height;
+
+        return result;
     }
 
     /**
