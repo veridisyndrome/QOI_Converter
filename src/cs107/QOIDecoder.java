@@ -1,9 +1,7 @@
 package cs107;
 
-import javax.swing.*;
-
 import static cs107.Helper.Image;
-import static cs107.QOISpecification.QOI_OP_DIFF_TAG;
+import static cs107.QOISpecification.*;
 
 /**
  * "Quite Ok Image" Decoder
@@ -133,7 +131,7 @@ public final class QOIDecoder {
     public static byte[] decodeQoiOpLuma(byte[] previousPixel, byte[] data){
         assert previousPixel != null && data != null;
         assert previousPixel.length == 4;
-        assert (byte) (data[0] & 0b11000000) == QOISpecification.QOI_OP_LUMA_TAG;
+        assert (byte) (data[0] & 0b11000000) == QOI_OP_LUMA_TAG;
 
         byte b0 = (byte) ((0b00111111 & data[0]) - 32);
         byte b1 = (byte) (previousPixel[0] + ((0b11110000 & data[1]) >> 4) - 8);
@@ -189,8 +187,9 @@ public final class QOIDecoder {
      * @return (Image) - Decoded image
      * @throws AssertionError if content is null
      */
-    public static Image decodeQoiFile(byte[] content){
-        return Helper.fail("Not Implemented");
+    public static Image decodeQoiFile(byte[] content) {
+        assert content != null;
+        throw new RuntimeException("stub");
     }
 
 }
