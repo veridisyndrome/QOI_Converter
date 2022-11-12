@@ -35,10 +35,10 @@ public final class QOIDecoder {
         assert header.length == QOISpecification.HEADER_SIZE;
         assert ArrayUtils.equals(ArrayUtils.extract(header, 0, 4), QOISpecification.QOI_MAGIC);
 
-        byte canalsNumber = header[12];
+        byte channels = header[12];
         byte colorSpace = header[13];
 
-        assert canalsNumber == QOISpecification.RGB || canalsNumber == QOISpecification.RGBA;
+        assert channels == QOISpecification.RGB || channels == QOISpecification.RGBA;
         assert colorSpace == QOISpecification.ALL || colorSpace == QOISpecification.sRGB;
 
         int width = ArrayUtils.toInt(ArrayUtils.extract(header, 4, 4));
@@ -47,7 +47,7 @@ public final class QOIDecoder {
         assert width > 0;
         assert height > 0;
 
-        return new int[]{width, height, canalsNumber, colorSpace};
+        return new int[]{width, height, channels, colorSpace};
     }
 
 

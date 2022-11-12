@@ -145,21 +145,21 @@ public final class ArrayUtils {
      */
     public static byte[] concat(byte[] ... tabs) {
         assert tabs != null;
-        int numberElement = 0;
-        int indice = 0;
+        int elementNumber = 0;
+        int index = 0;
 
         for (int i = 0; i < tabs.length; i++) {
             for (int j = 0; j < tabs[i].length; j++) {
-                numberElement++;
+                elementNumber++;
             }
         }
 
-        byte[] finalTable = new byte[numberElement];
+        byte[] finalTable = new byte[elementNumber];
 
         for (int i = 0; i < tabs.length; i++) {
             for (int j = 0; j < tabs[i].length; j++) {
-                finalTable[indice] = tabs[i][j];
-                indice++;
+                finalTable[index] = tabs[i][j];
+                index++;
             }
         }
         return finalTable;
@@ -178,7 +178,7 @@ public final class ArrayUtils {
 
         byte[] tab = new byte[bytes.length];
 
-        for(int i = 0; i < bytes.length; i++)
+        for (int i = 0; i < bytes.length; i++)
         {
             tab[i] = bytes[i];
         }
@@ -208,7 +208,7 @@ public final class ArrayUtils {
 
         byte[] extracted = new byte[length];
 
-        for(int i = 0; i < length; i++)
+        for (int i = 0; i < length; i++)
         {
             extracted[i] = input[start+i];
         }
@@ -280,7 +280,7 @@ public final class ArrayUtils {
         }
 
         int lines = input.length;
-        if(lines == 0){
+        if (lines == 0){
             return new byte[][]{};
         }
         int columns = input[0].length;
