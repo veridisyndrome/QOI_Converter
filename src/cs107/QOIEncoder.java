@@ -38,13 +38,13 @@ public final class QOIEncoder {
         assert image.channels() == QOISpecification.RGB || image.channels() == QOISpecification.RGBA;
         assert image.color_space() == QOISpecification.sRGB || image.color_space() == QOISpecification.ALL;
 
-        byte[] nombreMagique = QOISpecification.QOI_MAGIC;
-        byte[] largeurImage = ArrayUtils.fromInt(image.data()[0].length);
-        byte[] hauteurImage = ArrayUtils.fromInt(image.data().length);
-        byte[] nombreCanaux = ArrayUtils.wrap(image.channels());
-        byte[] espaceCouleur = ArrayUtils.wrap(image.color_space());
+        byte[] magicNumber = QOISpecification.QOI_MAGIC;
+        byte[] imageWidth = ArrayUtils.fromInt(image.data()[0].length);
+        byte[] imageHeight = ArrayUtils.fromInt(image.data().length);
+        byte[] canalsNumber = ArrayUtils.wrap(image.channels());
+        byte[] colorSpace = ArrayUtils.wrap(image.color_space());
 
-        return ArrayUtils.concat(nombreMagique, largeurImage, hauteurImage, nombreCanaux, espaceCouleur);
+        return ArrayUtils.concat(magicNumber, imageWidth, imageHeight, canalsNumber, colorSpace);
     }
 
     // ==================================================================================
@@ -65,7 +65,6 @@ public final class QOIEncoder {
         byte b1 = pixel[0];
         byte b2 = pixel[1];
         byte b3 = pixel[2];
-
 
         return ArrayUtils.concat(b0, b1, b2, b3);
     }
@@ -180,10 +179,10 @@ public final class QOIEncoder {
     public static byte[] encodeData(byte[][] image) {
         assert image != null;
 
-        byte[] pixelPrecedent = QOISpecification.START_PIXEL;
-        byte[][] tableDeHachage = new byte[64][4];
+        byte[] previousPixel = QOISpecification.START_PIXEL;
+        byte[][] hashTable = new byte[64][4];
 
-        int compteur = 0;
+        int counter = 0;
         List<byte[]> arrayList = new ArrayList<>();
 
         for (int i = 0; i < image.length; i++) {
@@ -194,29 +193,29 @@ public final class QOIEncoder {
         for (int i = 0; i < image.length; i++) {
             byte[] pixel = image[i];
             if (i != 0) {
-                pixelPrecedent = image[i-1];
+                previousPixel = image[i-1];
             }
 
-            if (ArrayUtils.equals(pixel, pixelPrecedent)) {
-                compteur++;
-                if (compteur == 62 || i == image.length - 1) {
-                    arrayList.add(qoiOpRun((byte) compteur));
-                    compteur = 0;
+            if (ArrayUtils.equals(pixel, previousPixel)) {
+                counter++;
+                if (counter == 62 || i == image.length - 1) {
+                    arrayList.add(qoiOpRun((byte) counter));
+                    counter = 0;
                 }
                 continue;
             } else {
-                if (compteur != 0) {
-                    arrayList.add(qoiOpRun((byte) compteur));
-                    compteur = 0;
+                if (counter != 0) {
+                    arrayList.add(qoiOpRun((byte) counter));
+                    counter = 0;
                 }
             }
 
-            if (tryHashEncode(tableDeHachage, arrayList, pixel)) continue;
+            if (tryHashEncode(hashTable, arrayList, pixel)) continue;
 
-            if (pixel[3] == pixelPrecedent[3]) {
-                if (tryDiffEncode(pixelPrecedent, arrayList, pixel)) continue;
+            if (pixel[3] == previousPixel[3]) {
+                if (tryDiffEncode(previousPixel, arrayList, pixel)) continue;
 
-                if (tryLumaEncode(arrayList, pixel, pixelPrecedent)) continue;
+                if (tryLumaEncode(arrayList, pixel, previousPixel)) continue;
                 arrayList.add(QOIEncoder.qoiOpRGB(pixel));
             } else {
                 arrayList.add(qoiOpRGBA(pixel));
@@ -231,10 +230,10 @@ public final class QOIEncoder {
         return ArrayUtils.concat(newArray);
     }
 
-    private static boolean tryLumaEncode(List<byte[]> arrayList, byte[] pixel, byte[] pixelPrecedent) {
-        byte dr = (byte)(pixel[0] - pixelPrecedent[0]);
-        byte dg = (byte)(pixel[1] - pixelPrecedent[1]);
-        byte db = (byte)(pixel[2] - pixelPrecedent[2]);
+    private static boolean tryLumaEncode(List<byte[]> arrayList, byte[] pixel, byte[] previousPixel) {
+        byte dr = (byte)(pixel[0] - previousPixel[0]);
+        byte dg = (byte)(pixel[1] - previousPixel[1]);
+        byte db = (byte)(pixel[2] - previousPixel[2]);
 
         if ((dg > -33 && dg < 32)
                 && (dr - dg > -9 && dr - dg < 8)
@@ -245,15 +244,15 @@ public final class QOIEncoder {
         return false;
     }
 
-    private static boolean tryDiffEncode(byte[] pixelPrecedent, List<byte[]> arrayList, byte[] pixel) {
-        int compteurDiff = 0;
+    private static boolean tryDiffEncode(byte[] previousPixel, List<byte[]> arrayList, byte[] pixel) {
+        int diffCounter = 0;
         for (int j = 0; j < 3; j++) {
-            if (((byte)(pixel[j] - pixelPrecedent[j]) > -3 && (byte)(pixel[j] - pixelPrecedent[j]) < 2)) {
-                ++compteurDiff;
+            if (((byte)(pixel[j] - previousPixel[j]) > -3 && (byte)(pixel[j] - previousPixel[j]) < 2)) {
+                ++diffCounter;
             }
         }
-        if (compteurDiff == 3) {
-            byte[] delta = {(byte)(pixel[0] - pixelPrecedent[0]), (byte)(pixel[1] - pixelPrecedent[1]), (byte)(pixel[2] - pixelPrecedent[2])};
+        if (diffCounter == 3) {
+            byte[] delta = {(byte)(pixel[0] - previousPixel[0]), (byte)(pixel[1] - previousPixel[1]), (byte)(pixel[2] - previousPixel[2])};
 
             arrayList.add(QOIEncoder.qoiOpDiff(delta));
             return true;
@@ -261,12 +260,12 @@ public final class QOIEncoder {
         return false;
     }
 
-    private static boolean tryHashEncode(byte[][] tableDeHachage, List<byte[]> arrayList, byte[] pixel) {
-        if (ArrayUtils.equals(tableDeHachage[hash(pixel)], pixel)) {
+    private static boolean tryHashEncode(byte[][] hashTable, List<byte[]> arrayList, byte[] pixel) {
+        if (ArrayUtils.equals(hashTable[hash(pixel)], pixel)) {
             arrayList.add(qoiOpIndex(hash(pixel)));
             return true;
         } else {
-            tableDeHachage[hash(pixel)] = pixel;
+            hashTable[hash(pixel)] = pixel;
         }
         return false;
     }

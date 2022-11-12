@@ -29,20 +29,20 @@ public final class ArrayUtils {
      * @throws AssertionError if one of the parameters is null
      */
     public static boolean equals(byte[] a1, byte[] a2) {
-        boolean valeursIdentiques = true;
+        boolean identicalValue = true;
         assert (a1 == null && a2 == null) || (a1 != null && a2 != null);
 
         if (a1 == null) {
-            return valeursIdentiques;
+            return identicalValue;
         } else {
             for (int i = 0; i < a1.length; i++) {
                 if (a1[i] != a2[i]) {
-                    valeursIdentiques = false;
+                    identicalValue = false;
                     break;
                 }
             }
 
-            return valeursIdentiques;
+            return identicalValue;
         }
     }
 
@@ -55,11 +55,11 @@ public final class ArrayUtils {
      * @throws AssertionError if one of the parameters is null
      */
     public static boolean equals(byte[][] a1, byte[][] a2) {
-        boolean valeursIdentiques = true;
+        boolean identicalValue = true;
         assert (a1 == null && a2 == null) || (a1 != null && a2 != null);
 
         if (a1 == null) {
-            return valeursIdentiques;
+            return identicalValue;
         }
 
         assert a1.length == a2.length;
@@ -67,13 +67,13 @@ public final class ArrayUtils {
         for (int i = 0; i < a1.length; i++) {
             for (int j = 0; j < a1[i].length; j++) {
                 if (a1[i][j] != a2[i][j]) {
-                    valeursIdentiques = false;
+                    identicalValue = false;
                     break;
                 }
             }
         }
 
-        return valeursIdentiques;
+        return identicalValue;
     }
 
     // ==================================================================================
@@ -145,24 +145,24 @@ public final class ArrayUtils {
      */
     public static byte[] concat(byte[] ... tabs) {
         assert tabs != null;
-        int nombreElement = 0;
+        int numberElement = 0;
         int indice = 0;
 
         for (int i = 0; i < tabs.length; i++) {
             for (int j = 0; j < tabs[i].length; j++) {
-                nombreElement++;
+                numberElement++;
             }
         }
 
-        byte[] tableauFinal = new byte[nombreElement];
+        byte[] finalTable = new byte[numberElement];
 
         for (int i = 0; i < tabs.length; i++) {
             for (int j = 0; j < tabs[i].length; j++) {
-                tableauFinal[indice] = tabs[i][j];
+                finalTable[indice] = tabs[i][j];
                 indice++;
             }
         }
-        return tableauFinal;
+        return finalTable;
     }
 
     /**
@@ -231,24 +231,24 @@ public final class ArrayUtils {
     public static byte[][] partition(byte[] input, int... sizes) {
         assert input != null && sizes != null;
 
-        int somme = 0;
+        int sum = 0;
 
         for (int i = 0; i < sizes.length; i++) {
-            somme += sizes[i];
+            sum += sizes[i];
         }
 
-        assert somme == input.length;
+        assert sum == input.length;
 
         byte[][] partition = new byte[sizes.length][];
 
-        int indice = 0;
+        int index = 0;
 
         for (int i = 0; i < sizes.length; i++) {
             partition[i] = new byte[sizes[i]];
 
             for (int j = 0; j < sizes[i]; j++) {
-                partition[i][j] = input[indice];
-                indice++;
+                partition[i][j] = input[index];
+                index++;
             }
         }
 
@@ -279,17 +279,17 @@ public final class ArrayUtils {
             assert input[i].length == input[i + 1].length;
         }
 
-        int lignes = input.length;
-        if(lignes == 0){
+        int lines = input.length;
+        if(lines == 0){
             return new byte[][]{};
         }
-        int colonnes = input[0].length;
+        int columns = input[0].length;
 
-        byte[][] output = new byte[lignes * colonnes][4];
-        int indice = 0;
+        byte[][] output = new byte[lines * columns][4];
+        int index = 0;
 
-        for (int i = 0; i < lignes; i++) {
-            for (int j = 0; j < colonnes; j++) {
+        for (int i = 0; i < lines; i++) {
+            for (int j = 0; j < columns; j++) {
                 byte[] bytes = ArrayUtils.fromInt(input[i][j]);
                 byte temp = bytes[0];
                 bytes[0] = bytes[1];
@@ -297,8 +297,8 @@ public final class ArrayUtils {
                 bytes[2] = bytes[3];
                 bytes[3] = temp;
 
-                output[indice] = bytes;
-                indice++;
+                output[index] = bytes;
+                index++;
 
             }
         }
@@ -332,20 +332,20 @@ public final class ArrayUtils {
 
 
         int[][] output = new int[height][width];
-        int indice = 0;
+        int index = 0;
 
         byte[] temp = new byte[4];
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
 
-                temp[0] = input[indice][3];
-                temp[1] = input[indice][0];
-                temp[2] = input[indice][1];
-                temp[3] = input[indice][2];
+                temp[0] = input[index][3];
+                temp[1] = input[index][0];
+                temp[2] = input[index][1];
+                temp[3] = input[index][2];
 
                 output[i][j] = ArrayUtils.toInt(temp);
-                indice++;
+                index++;
             }
         }
 

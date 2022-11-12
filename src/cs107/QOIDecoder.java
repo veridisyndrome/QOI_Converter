@@ -35,19 +35,19 @@ public final class QOIDecoder {
         assert header.length == QOISpecification.HEADER_SIZE;
         assert ArrayUtils.equals(ArrayUtils.extract(header, 0, 4), QOISpecification.QOI_MAGIC);
 
-        byte nombreDeCanaux = header[12];
-        byte espaceCouleur = header[13];
+        byte canalsNumber = header[12];
+        byte colorSpace = header[13];
 
-        assert nombreDeCanaux == QOISpecification.RGB || nombreDeCanaux == QOISpecification.RGBA;
-        assert espaceCouleur == QOISpecification.ALL || espaceCouleur == QOISpecification.sRGB;
+        assert canalsNumber == QOISpecification.RGB || canalsNumber == QOISpecification.RGBA;
+        assert colorSpace == QOISpecification.ALL || colorSpace == QOISpecification.sRGB;
 
-        int largeur = ArrayUtils.toInt(ArrayUtils.extract(header, 4, 4));
-        int hauteur = ArrayUtils.toInt(ArrayUtils.extract(header, 8, 4));
+        int width = ArrayUtils.toInt(ArrayUtils.extract(header, 4, 4));
+        int height = ArrayUtils.toInt(ArrayUtils.extract(header, 8, 4));
 
-        assert largeur > 0;
-        assert hauteur > 0;
+        assert width > 0;
+        assert height > 0;
 
-        return new int[]{largeur, hauteur, nombreDeCanaux, espaceCouleur};
+        return new int[]{width, height, canalsNumber, colorSpace};
     }
 
 
@@ -188,8 +188,8 @@ public final class QOIDecoder {
         assert data != null;
         assert height > 0 && width > 0;
 
-        byte[] pixelPrecedent = QOISpecification.START_PIXEL;
-        byte[][] tableDeHachage = new byte[64][4];
+        byte[] previousPixel = QOISpecification.START_PIXEL;
+        byte[][] hashTable = new byte[64][4];
 
         byte[][] result = new byte[height * width][4];
 
@@ -199,32 +199,32 @@ public final class QOIDecoder {
         while (idx < data.length) {
             byte tag = data[idx];
             if (pos != 0) {
-                pixelPrecedent = result[pos - 1];
+                previousPixel = result[pos - 1];
             }
             if (tag == QOISpecification.QOI_OP_RGB_TAG) {
-                decodeQoiOpRGB(result, data, pixelPrecedent[3], pos, idx + 1);
+                decodeQoiOpRGB(result, data, previousPixel[3], pos, idx + 1);
                 idx += 4;
             } else if (tag == QOISpecification.QOI_OP_RGBA_TAG) {
                 decodeQoiOpRGBA(result, data, pos, idx + 1);
                 idx += 5;
             } else if ((byte) (tag & 0b11000000) == QOI_OP_DIFF_TAG) {
-                result[pos] = decodeQoiOpDiff(pixelPrecedent, tag);
+                result[pos] = decodeQoiOpDiff(previousPixel, tag);
                 idx++;
             } else if ((byte) (tag & 0b11000000) == QOI_OP_LUMA_TAG) {
-                result[pos] = decodeQoiOpLuma(pixelPrecedent, ArrayUtils.extract(data, idx, 2));
+                result[pos] = decodeQoiOpLuma(previousPixel, ArrayUtils.extract(data, idx, 2));
                 idx += 2;
             } else if ((byte) (tag & 0b11000000) == QOI_OP_RUN_TAG) {
-                int count = decodeQoiOpRun(result, pixelPrecedent, tag, pos);
+                int count = decodeQoiOpRun(result, previousPixel, tag, pos);
                 idx++;
                 pos += count;
             } else if ((byte) (tag & 0b11000000) == QOI_OP_INDEX_TAG) {
                 int index = tag & 0b00111111;
-                result[pos] = tableDeHachage[index];
+                result[pos] = hashTable[index];
                 idx++;
             }
 
             pos++;
-            tableDeHachage[hash(result[pos - 1])] = result[pos - 1];
+            hashTable[hash(result[pos - 1])] = result[pos - 1];
         }
         assert pos == width * height;
 
@@ -240,11 +240,14 @@ public final class QOIDecoder {
      */
     public static Image decodeQoiFile(byte[] content) {
         assert content != null;
+
         int[] header = decodeHeader(ArrayUtils.extract(content, 0, QOISpecification.HEADER_SIZE));
         byte[] channels = ArrayUtils.extract(content, HEADER_SIZE, content.length - HEADER_SIZE - QOI_EOF.length);
+
         int width = header[0];
         int height = header[1];
         int[][] data = ArrayUtils.channelsToImage(decodeData(channels, width, height), height, width);
+
         return Helper.generateImage(data, (byte) header[2], (byte) header[3]);
     }
 
