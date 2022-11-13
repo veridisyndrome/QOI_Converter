@@ -29,21 +29,16 @@ public final class ArrayUtils {
      * @throws AssertionError if one of the parameters is null
      */
     public static boolean equals(byte[] a1, byte[] a2) {
-        boolean identicalValue = true;
         assert (a1 == null && a2 == null) || (a1 != null && a2 != null);
-
         if (a1 == null) {
-            return identicalValue;
-        } else {
-            for (int i = 0; i < a1.length; i++) {
-                if (a1[i] != a2[i]) {
-                    identicalValue = false;
-                    break;
-                }
-            }
-
-            return identicalValue;
+            return true;
         }
+        for (int i = 0; i < a1.length; i++) {
+            if (a1[i] != a2[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -55,11 +50,10 @@ public final class ArrayUtils {
      * @throws AssertionError if one of the parameters is null
      */
     public static boolean equals(byte[][] a1, byte[][] a2) {
-        boolean identicalValue = true;
         assert (a1 == null && a2 == null) || (a1 != null && a2 != null);
 
         if (a1 == null) {
-            return identicalValue;
+            return true;
         }
 
         assert a1.length == a2.length;
@@ -67,13 +61,11 @@ public final class ArrayUtils {
         for (int i = 0; i < a1.length; i++) {
             for (int j = 0; j < a1[i].length; j++) {
                 if (a1[i][j] != a2[i][j]) {
-                    identicalValue = false;
-                    break;
+                    return false;
                 }
             }
         }
-
-        return identicalValue;
+        return true;
     }
 
     // ==================================================================================
@@ -149,9 +141,8 @@ public final class ArrayUtils {
         int index = 0;
 
         for (int i = 0; i < tabs.length; i++) {
-            for (int j = 0; j < tabs[i].length; j++) {
-                elementNumber++;
-            }
+            assert tabs[i] != null;
+            elementNumber += tabs[i].length;
         }
 
         byte[] finalTable = new byte[elementNumber];
@@ -175,14 +166,11 @@ public final class ArrayUtils {
      */
     public static byte[] concat(byte... bytes) {
         assert bytes != null;
-
         byte[] tab = new byte[bytes.length];
 
-        for (int i = 0; i < bytes.length; i++)
-        {
+        for (int i = 0; i < bytes.length; i++) {
             tab[i] = bytes[i];
         }
-
         return tab;
     }
 
@@ -208,8 +196,7 @@ public final class ArrayUtils {
 
         byte[] extracted = new byte[length];
 
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             extracted[i] = input[start+i];
         }
 
@@ -245,7 +232,6 @@ public final class ArrayUtils {
 
         for (int i = 0; i < sizes.length; i++) {
             partition[i] = new byte[sizes[i]];
-
             for (int j = 0; j < sizes[i]; j++) {
                 partition[i][j] = input[index];
                 index++;
@@ -329,7 +315,6 @@ public final class ArrayUtils {
         for (int i = 0; i < input.length; i++) {
             assert input[i] != null;
         }
-
 
         int[][] output = new int[height][width];
         int index = 0;

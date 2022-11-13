@@ -138,16 +138,15 @@ public final class QOIEncoder {
         assert diff != null;
         assert diff.length == 3;
         assert diff[1] > -33 && diff[1] < 32;
-        assert diff[0] - diff[1] > -9 && diff[0] - diff[1] < 8;
-        assert diff[2] - diff[1] > -9 && diff[2] - diff[1] < 8;
+        assert (byte) (diff[0] - diff[1]) > -9 && (byte) (diff[0] - diff[1]) < 8;
+        assert (byte) (diff[2] - diff[1]) > -9 && (byte) (diff[2] - diff[1]) < 8;
 
         byte b0 = (byte) (diff[1] + 32);
-        byte b1 = (byte) ((diff[0] - diff[1] + 8) << 4);
+        byte b1 = (byte) ((byte) (diff[0] - diff[1] + 8) << 4);
         byte b2 = (byte) (diff[2] - diff[1] + 8);
 
         byte[] encoding1 = ArrayUtils.wrap((byte) (QOI_OP_LUMA_TAG | b0));
         byte[] encoding2 = ArrayUtils.wrap((byte) (b1 | b2));
-
 
         return ArrayUtils.concat(encoding1, encoding2);
     }
@@ -178,17 +177,16 @@ public final class QOIEncoder {
      */
     public static byte[] encodeData(byte[][] image) {
         assert image != null;
+        for (int i = 0; i < image.length; i++) {
+            assert image[i] != null;
+            assert image[i].length == 4;
+        }
 
         byte[] previousPixel = QOISpecification.START_PIXEL;
         byte[][] hashTable = new byte[64][4];
 
         int counter = 0;
         List<byte[]> arrayList = new ArrayList<>();
-
-        for (int i = 0; i < image.length; i++) {
-            assert image[i] != null;
-            assert image[i].length == 4;
-        }
 
         for (int i = 0; i < image.length; i++) {
             byte[] pixel = image[i];
@@ -225,7 +223,6 @@ public final class QOIEncoder {
         byte[][] newArray = new byte[arrayList.size()][];
         for(int i = 0; i < arrayList.size(); ++i){
            newArray[i] = arrayList.get(i);
-
         }
         return ArrayUtils.concat(newArray);
     }
@@ -236,8 +233,8 @@ public final class QOIEncoder {
         byte db = (byte)(pixel[2] - previousPixel[2]);
 
         if ((dg > -33 && dg < 32)
-                && (dr - dg > -9 && dr - dg < 8)
-                && (db - dg > -9 && db - dg < 8)) {
+                && ((byte)(dr - dg) > -9 && (byte)(dr - dg) < 8)
+                && ((byte)(db - dg) > -9 && (byte)(db - dg) < 8)) {
             arrayList.add(QOIEncoder.qoiOpLuma(ArrayUtils.concat(dr, dg, db)));
             return true;
         }
@@ -253,7 +250,6 @@ public final class QOIEncoder {
         }
         if (diffCounter == 3) {
             byte[] delta = {(byte)(pixel[0] - previousPixel[0]), (byte)(pixel[1] - previousPixel[1]), (byte)(pixel[2] - previousPixel[2])};
-
             arrayList.add(QOIEncoder.qoiOpDiff(delta));
             return true;
         }

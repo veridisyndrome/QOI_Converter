@@ -202,27 +202,23 @@ public final class QOIDecoder {
                 previousPixel = result[pos - 1];
             }
             if (tag == QOISpecification.QOI_OP_RGB_TAG) {
-                decodeQoiOpRGB(result, data, previousPixel[3], pos, idx + 1);
-                idx += 4;
+                idx += decodeQoiOpRGB(result, data, previousPixel[3], pos, idx + 1);
             } else if (tag == QOISpecification.QOI_OP_RGBA_TAG) {
-                decodeQoiOpRGBA(result, data, pos, idx + 1);
-                idx += 5;
+                idx += decodeQoiOpRGBA(result, data, pos, idx + 1);
             } else if ((byte) (tag & 0b11000000) == QOI_OP_DIFF_TAG) {
                 result[pos] = decodeQoiOpDiff(previousPixel, tag);
-                idx++;
             } else if ((byte) (tag & 0b11000000) == QOI_OP_LUMA_TAG) {
                 result[pos] = decodeQoiOpLuma(previousPixel, ArrayUtils.extract(data, idx, 2));
-                idx += 2;
+                idx++;
             } else if ((byte) (tag & 0b11000000) == QOI_OP_RUN_TAG) {
                 int count = decodeQoiOpRun(result, previousPixel, tag, pos);
-                idx++;
                 pos += count;
             } else if ((byte) (tag & 0b11000000) == QOI_OP_INDEX_TAG) {
                 int index = tag & 0b00111111;
                 result[pos] = hashTable[index];
-                idx++;
             }
 
+            idx++;
             pos++;
             hashTable[hash(result[pos - 1])] = result[pos - 1];
         }
@@ -240,14 +236,12 @@ public final class QOIDecoder {
      */
     public static Image decodeQoiFile(byte[] content) {
         assert content != null;
-
         int[] header = decodeHeader(ArrayUtils.extract(content, 0, QOISpecification.HEADER_SIZE));
         byte[] channels = ArrayUtils.extract(content, HEADER_SIZE, content.length - HEADER_SIZE - QOI_EOF.length);
 
         int width = header[0];
         int height = header[1];
         int[][] data = ArrayUtils.channelsToImage(decodeData(channels, width, height), height, width);
-
         return Helper.generateImage(data, (byte) header[2], (byte) header[3]);
     }
 
