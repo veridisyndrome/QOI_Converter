@@ -71,9 +71,9 @@ public final class Main {
         assert testDecodeQoiOpRun();
         assert testDecodeData();
 
-        String name = "random";
+        String name = "dice";
 
-        qoiToPng("references/"+ name +".qoi", name + ".png");
+        pngToQoi("references/"+ name +".png", name + ".qoi");
 
         /*try {
             Diff.diff((new FileInputStream("references/beach.qoi").readAllBytes()),
